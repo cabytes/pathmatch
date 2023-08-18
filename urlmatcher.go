@@ -1,4 +1,4 @@
-package urlmatcher
+package pathmatch
 
 import (
 	"errors"
@@ -69,6 +69,10 @@ func (matcher *matcher) Match(url string) (Match, error) {
 				m.vars[matches[1]] = mappings[pos]
 				continue
 			}
+		}
+
+		if part == "*" {
+			return &m, nil
 		}
 
 		if part == mappings[pos] {

@@ -1,6 +1,20 @@
-package urlmatcher
+package pathmatch
 
 import "testing"
+
+func TestMatcherAsterix(t *testing.T) {
+
+	m := NewMatcher("/users/*")
+
+	if _, err := m.Match("/users/a"); err != nil {
+		t.Fail()
+	}
+
+	if _, err := m.Match("/users/1"); err != nil {
+		t.Fail()
+	}
+
+}
 
 func TestMatcherSimple(t *testing.T) {
 
