@@ -1,6 +1,6 @@
-# URLMatcher GoLang
+# PathMatch
 
-URLMatcher useful for url matching.
+PathMatch is mostly used for routing.
 
 ```
 func main() {
