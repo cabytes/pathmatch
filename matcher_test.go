@@ -2,6 +2,15 @@ package pathmatch
 
 import "testing"
 
+func TestMatchSimple(t *testing.T) {
+
+	m := NewMatcher("/users")
+
+	if _, err := m.Match("/users"); err != nil {
+		t.Fail()
+	}
+}
+
 func TestMatcherAsterix(t *testing.T) {
 
 	m := NewMatcher("/users/*")
