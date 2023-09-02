@@ -29,6 +29,8 @@ type match struct {
 	vars    map[string]string
 }
 
+var ErrNotMatched = errors.New("not matched")
+
 func NewMatcher(pattern string) Matcher {
 	return &matcher{pattern: pattern}
 }
@@ -79,7 +81,11 @@ func (matcher *matcher) Match(url string) (Match, error) {
 			continue
 		}
 
-		return nil, errors.New("Not matched")
+		return nil, ErrNotMatched
+	}
+
+	if len(mappings) > len(parts) {
+		return nil, ErrNotMatched
 	}
 
 	return &m, nil
