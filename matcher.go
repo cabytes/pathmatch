@@ -75,7 +75,7 @@ func (matcher *matcher) Match(url string) (Match, error) {
 				m.vars[matches[1]] = mappings[pos]
 				continue
 			}
-		} else if len(mappings) < pos && part == mappings[pos] {
+		} else if len(mappings)-1 > pos && part == mappings[pos] {
 			continue
 		}
 
