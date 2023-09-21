@@ -37,8 +37,17 @@ func NewMatcher(pattern string) Matcher {
 
 func (matcher *matcher) Match(url string) (Match, error) {
 
-	parts := strings.Split(matcher.pattern, "/")
-	mappings := strings.Split(url, "/")
+	if matcher.pattern == url {
+		return &match{
+			pattern: matcher.pattern,
+			url:     url,
+			vars:    make(map[string]string),
+		}, nil
+	}
+
+	parts := strings.Split(matcher.pattern, "/")[1:]
+
+	mappings := strings.Split(url, "/")[1:]
 
 	var m match = match{
 		pattern: matcher.pattern,
@@ -48,12 +57,7 @@ func (matcher *matcher) Match(url string) (Match, error) {
 
 	for pos, part := range parts {
 
-		// Skip first /
-		if pos == 0 {
-			continue
-		}
-
-		if RegMatchVar.Match([]byte(part)) && part != mappings[pos] {
+		if RegMatchVar.Match([]byte(part)) {
 
 			matches := RegMatchVar.FindStringSubmatch(part)
 
@@ -71,13 +75,19 @@ func (matcher *matcher) Match(url string) (Match, error) {
 				m.vars[matches[1]] = mappings[pos]
 				continue
 			}
+		} else if len(mappings) < pos && part == mappings[pos] {
+			continue
 		}
 
-		if part == "*" {
+		if part == "*" && len(parts) < len(mappings) {
 			return &m, nil
 		}
 
-		if part == mappings[pos] {
+		if part == "*" {
+			continue
+		}
+
+		if len(mappings) < pos && part == mappings[pos] {
 			continue
 		}
 
